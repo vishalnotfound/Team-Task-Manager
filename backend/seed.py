@@ -2,12 +2,18 @@ from app.database import SessionLocal, engine
 from app import models, auth
 from datetime import date, timedelta
 
-# Re-create all tables for a clean slate
-models.Base.metadata.drop_all(bind=engine)
+# Create tables if they do not exist
 models.Base.metadata.create_all(bind=engine)
 
 def seed_data():
     db = SessionLocal()
+    
+    # Only seed if database is empty
+    if db.query(models.User).count() > 0:
+        print("Database already contains data. Skipping seed to prevent duplication and data loss.")
+        db.close()
+        return
+
     
     # 1. Create Users
     admin_password = auth.get_password_hash("admin123")
