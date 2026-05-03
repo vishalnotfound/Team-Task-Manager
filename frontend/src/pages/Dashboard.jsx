@@ -84,7 +84,7 @@ function Dashboard({ favorites = [], toggleFavorite }) {
     <div>
       <div className="welcome-section" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', letterSpacing: '-0.02em' }}>Welcome back, {userName.split(' ')[0]} 👋</h1>
+          <h1 style={{ fontSize: '1.75rem', letterSpacing: '-0.02em' }}>Welcome, {userName.split(' ')[0]}</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Here's an overview of your team's progress today.</p>
         </div>
         <Link to="/projects" className="btn btn-primary" style={{ padding: '0.6rem 1.5rem' }}>
