@@ -39,12 +39,13 @@ function App() {
   }, [isAuthenticated]);
 
   const toggleFavorite = async (projectId) => {
+    const id = Number(projectId);
     try {
-      await projectService.toggleFavorite(projectId);
+      await projectService.toggleFavorite(id);
       setFavorites(prev => 
-        prev.includes(projectId)
-          ? prev.filter(id => id !== projectId)
-          : [...prev, projectId]
+        prev.includes(id)
+          ? prev.filter(favId => favId !== id)
+          : [...prev, id]
       );
     } catch (e) {
       console.error('Error toggling favorite:', e);
