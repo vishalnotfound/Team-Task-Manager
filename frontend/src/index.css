@@ -643,7 +643,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .project-card:hover { border-color: var(--primary); }
-.project-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.project-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
+.project-card-header-left { display: flex; align-items: center; gap: 0.75rem; }
 .project-card-icon {
   width: 40px; height: 40px;
   border-radius: var(--radius);
@@ -652,11 +653,35 @@ input:focus, select:focus, textarea:focus {
   justify-content: center;
 }
 .project-card-icon svg { width: 20px; height: 20px; }
-.project-card h3 { font-size: 0.9rem; font-weight: 700; }
-.project-card .project-card-desc { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4; }
-.project-card-footer { display: flex; align-items: center; justify-content: space-between; font-size: 0.7rem; color: var(--text-dim); }
+.project-card h3 { font-size: 0.9rem; font-weight: 700; margin: 0; }
+.project-delete-btn {
+  background: none; border: none; cursor: pointer; color: var(--text-muted);
+  padding: 0.2rem; border-radius: 4px; display: flex; transition: all var(--transition);
+}
+.project-delete-btn:hover { background: var(--red-bg); color: var(--red); }
+.project-delete-btn svg { width: 16px; height: 16px; }
 
-.progress-bar { height: 6px; background: var(--border); border-radius: 9999px; overflow: hidden; flex: 1; margin-right: 0.5rem; }
+.project-card .project-card-desc { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.5; }
+
+.project-card-stats-row {
+  display: flex; gap: 0.75rem; margin-bottom: 1.25rem;
+}
+.stat-badge {
+  display: flex; align-items: center; gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius);
+  font-size: 0.7rem; font-weight: 500;
+  color: var(--text-dim); border: 1px solid rgba(255,255,255,0.05);
+}
+.stat-badge svg { width: 14px; height: 14px; color: var(--text-muted); }
+
+.project-card-progress-section { margin-top: auto; }
+.progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; font-size: 0.7rem; }
+.progress-label { font-weight: 500; color: var(--text-muted); }
+.progress-percent { font-weight: 700; }
+
+.progress-bar { height: 6px; background: var(--border); border-radius: 9999px; overflow: hidden; width: 100%; }
 .progress-fill { height: 100%; background: var(--primary); border-radius: 9999px; transition: width 0.5s ease; }
 
 /* ── Empty ── */
