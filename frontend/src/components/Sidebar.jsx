@@ -21,7 +21,11 @@ function Sidebar({
           <div className="sidebar-user-avatar">{userName.charAt(0).toUpperCase()}</div>
           <div className="sidebar-user-details">
             <div className="sidebar-user-name">{userName}</div>
-            <div className="sidebar-user-email">{userName.toLowerCase().replace(' ', '.')}@domain.com</div>
+            <div style={{ marginTop: '0.15rem' }}>
+              <span className={`sidebar-user-role role-tag-${role}`}>
+                {role}
+              </span>
+            </div>
           </div>
         </div>
 

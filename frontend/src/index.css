@@ -469,6 +469,31 @@ body {
   outline: none;
 }
 
+.sidebar-user-role {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: lowercase;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.1rem;
+  opacity: 0.9;
+}
+
+.sidebar-user-role::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.role-tag-admin { color: var(--blue); }
+.role-tag-admin::before { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+
+.role-tag-member { color: var(--green); }
+.role-tag-member::before { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
 .sidebar-nav {
   padding: 0 1rem;
   flex: 1;
@@ -2185,7 +2210,10 @@ select.status-select:hover {
     background: var(--sidebar-bg) !important;
     overflow: hidden !important;
     position: fixed !important;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
   .login-sidebar {
@@ -2204,7 +2232,7 @@ select.status-select:hover {
 
   .login-card {
     width: 100% !important;
-    max-width: clamp(100%, 80vw, 420px) !important; 
+    max-width: clamp(100%, 80vw, 420px) !important;
     height: 100% !important;
     background: var(--bg) !important;
     padding: 2.5rem 1.5rem !important;
