@@ -14,6 +14,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState({ tasks: [], projects: [] });
   const [showResults, setShowResults] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [favorites, setFavorites] = useState(() => {
@@ -54,10 +55,11 @@ function App() {
     }
   }, [location.pathname, navigate]);
 
-  // Close search results on route change
+  // Close sidebar on route change (mobile)
   useEffect(() => {
     setShowResults(false);
     setSearchQuery('');
+    setIsSidebarOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -145,12 +147,19 @@ function App() {
     <div className="app-layout">
       <Sidebar 
         onLogout={handleLogout} 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
         favorites={favorites}
         allProjects={allProjects}
       />
       <main className="main-content">
         <div className="top-bar">
           <div className="top-bar-left">
+            <button className="menu-btn" onClick={() => setIsSidebarOpen(true)}>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} width="22" height="22">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
             <div className="search-box" ref={searchRef}>
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
