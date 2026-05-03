@@ -562,10 +562,6 @@ body {
   box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.4);
 }
 
-.stat-card::after {
-  content: none;
-}
-
 .stat-icon {
   width: 48px;
   height: 48px;
@@ -1256,34 +1252,36 @@ select option {
 .login-page {
   display: flex;
   min-height: 100vh;
+  width: 100%;
 }
 
 .login-sidebar {
-  width: 420px;
+  flex: 1;
+  max-width: 50%;
   background: var(--sidebar-bg);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 3rem;
+  padding: 4vw;
   border-right: 1px solid var(--border);
 }
 
 .login-sidebar h1 {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 700;
   color: #fff;
-  margin-bottom: 0.75rem;
-  line-height: 1.2;
+  margin-bottom: 1rem;
+  line-height: 1.1;
 }
 
 .login-sidebar p {
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
   color: var(--text-muted);
   line-height: 1.6;
 }
 
 .login-main {
-  flex: 1;
+  flex: 1.2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1705,6 +1703,7 @@ select.status-select:hover {
   .dash-grid {
     grid-template-columns: 1fr 280px;
   }
+
   .stats-grid {
     gap: 1rem;
   }
@@ -1717,9 +1716,11 @@ select.status-select:hover {
     gap: 1rem;
     padding: 1rem;
   }
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
+
   .dash-grid {
     grid-template-columns: 1fr;
   }
@@ -1815,10 +1816,11 @@ select.status-select:hover {
     grid-template-columns: 1fr 100px 36px !important;
     gap: 0.5rem;
   }
+
   .table-head.task-cols span:nth-child(2),
-  .table-row.task-cols > div:nth-child(2),
+  .table-row.task-cols>div:nth-child(2),
   .table-head.task-cols span:nth-child(3),
-  .table-row.task-cols > div:nth-child(3) {
+  .table-row.task-cols>div:nth-child(3) {
     display: none !important;
   }
 
@@ -1826,10 +1828,11 @@ select.status-select:hover {
   .project-grid-cols {
     grid-template-columns: 1fr 100px 36px !important;
   }
+
   .table-head.project-grid-cols span:nth-child(2),
-  .table-row.project-grid-cols > div:nth-child(2),
+  .table-row.project-grid-cols>div:nth-child(2),
   .table-head.project-grid-cols span:nth-child(3),
-  .table-row.project-grid-cols > div:nth-child(3) {
+  .table-row.project-grid-cols>div:nth-child(3) {
     display: none !important;
   }
 
@@ -1837,8 +1840,9 @@ select.status-select:hover {
   .member-table-cols {
     grid-template-columns: 1fr 80px !important;
   }
+
   .table-head.member-table-cols span:nth-child(2),
-  .table-row.member-table-cols > div:nth-child(2) {
+  .table-row.member-table-cols>div:nth-child(2) {
     display: none !important;
   }
 
@@ -1871,7 +1875,7 @@ select.status-select:hover {
     align-items: stretch !important;
     gap: 0.75rem !important;
   }
-  
+
   .form-group {
     width: 100% !important;
   }
@@ -1893,9 +1897,9 @@ select.status-select:hover {
     margin-top: 0 !important;
     width: auto !important;
   }
-  
+
   /* Project Detail Header Progress Override */
-  .page-content > div > div:first-child > div:nth-child(2) > div:nth-child(2) {
+  .page-content>div>div:first-child>div:nth-child(2)>div:nth-child(2) {
     width: auto !important;
     flex: 1 !important;
   }
@@ -1908,6 +1912,7 @@ select.status-select:hover {
     padding-bottom: 0.25rem;
     -webkit-overflow-scrolling: touch;
   }
+
   .filter-tab {
     flex-shrink: 0;
   }
@@ -1943,33 +1948,6 @@ select.status-select:hover {
   .stat-card {
     padding: 1.25rem;
     border-radius: 12px;
-  }
-
-  /* Login page responsive overhaul */
-  .login-page {
-    flex-direction: column;
-    min-height: auto;
-  }
-  
-  .login-sidebar {
-    width: 100% !important;
-    padding: 3rem 1.5rem !important;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-  }
-
-  /* Center the brand logo + text flex container */
-  .login-sidebar > div:first-child > div:first-child {
-    justify-content: center !important;
-  }
-  
-  .login-sidebar h1 {
-    font-size: 1.5rem;
-  }
-  
-  .login-main {
-    padding: 2rem 1rem;
   }
 
   .login-card {
@@ -2030,20 +2008,19 @@ select.status-select:hover {
   .table-row {
     padding: 0.75rem 1rem;
   }
-  
+
   .stat-value {
     font-size: 1.5rem;
   }
-  
+
   .stat-label {
     font-size: 0.75rem;
   }
-  
+
   .side-panel {
     padding: 1rem !important;
   }
 }
-
 
 /* ── Login Container (simple centered) ── */
 .login-container {
@@ -2113,7 +2090,7 @@ select.status-select:hover {
   gap: 1rem;
 }
 
-/* ── Search Dropdown ── */
+/* ── Search Result Styles ── */
 .search-dropdown {
   position: absolute;
   top: 100%;
@@ -2150,16 +2127,6 @@ select.status-select:hover {
 
 .search-result-item:hover {
   background: rgba(255, 255, 255, 0.05);
-}
-
-.search-result-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 }
 
 .search-result-text {
@@ -2205,4 +2172,47 @@ select.status-select:hover {
   margin: 0 auto 0.5rem;
   opacity: 0.3;
   display: block;
+}
+
+/* ── FINAL MOBILE OVERRIDES (PRIORITY) ── */
+@media (max-width: 640px) {
+  .login-page {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    background: var(--sidebar-bg) !important;
+    overflow: hidden !important;
+    position: fixed !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
+
+  .login-sidebar {
+    display: none !important;
+  }
+
+  .login-main {
+    flex: 1 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    background: transparent !important;
+    padding: 0 !important;
+    height: 100% !important;
+  }
+
+  .login-card {
+    width: 100% !important;
+    max-width: clamp(100%, 80vw, 420px) !important; 
+    height: 100% !important;
+    background: var(--bg) !important;
+    padding: 2.5rem 1.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.5) !important;
+    border-left: 1px solid var(--border) !important;
+    margin-left: auto !important;
+  }
 }
