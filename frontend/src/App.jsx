@@ -17,10 +17,7 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem('favorites');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [favorites, setFavorites] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
   const searchRef = useRef(null);
   const notifRef = useRef(null);
@@ -28,21 +25,30 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
       try {
-        const res = await projectService.getProjects();
-        setAllProjects(res.data);
+        const [projRes, favRes] = await Promise.all([
+          projectService.getProjects(),
+          projectService.getFavorites()
+        ]);
+        setAllProjects(projRes.data);
+        setFavorites(favRes.data);
       } catch (e) { console.error(e); }
     };
-    if (isAuthenticated) fetchProjects();
+    if (isAuthenticated) fetchData();
   }, [isAuthenticated]);
 
-  const toggleFavorite = (projectId) => {
-    const newFavorites = favorites.includes(projectId)
-      ? favorites.filter(id => id !== projectId)
-      : [...favorites, projectId];
-    setFavorites(newFavorites);
-    localStorage.setItem('favorites', JSON.stringify(newFavorites));
+  const toggleFavorite = async (projectId) => {
+    try {
+      await projectService.toggleFavorite(projectId);
+      setFavorites(prev => 
+        prev.includes(projectId)
+          ? prev.filter(id => id !== projectId)
+          : [...prev, projectId]
+      );
+    } catch (e) {
+      console.error('Error toggling favorite:', e);
+    }
   };
 
   useEffect(() => {
@@ -125,7 +131,9 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('userName');
     setIsAuthenticated(false);
     navigate('/login');
   };

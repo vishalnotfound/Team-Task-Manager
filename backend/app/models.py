@@ -24,6 +24,7 @@ class User(Base):
     owned_projects = relationship("Project", back_populates="owner")
     project_memberships = relationship("ProjectMember", back_populates="user")
     assigned_tasks = relationship("Task", back_populates="assignee")
+    favorite_projects = relationship("UserFavoriteProject", back_populates="user", cascade="all, delete-orphan")
 
 
 class Project(Base):
@@ -43,8 +44,8 @@ class ProjectMember(Base):
     __tablename__ = "project_members"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User", back_populates="project_memberships")
     project = relationship("Project", back_populates="members")
@@ -64,3 +65,14 @@ class Task(Base):
 
     assignee = relationship("User", back_populates="assigned_tasks")
     project = relationship("Project", back_populates="tasks")
+
+
+class UserFavoriteProject(Base):
+    __tablename__ = "user_favorite_projects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+
+    user = relationship("User", back_populates="favorite_projects")
+    project = relationship("Project")

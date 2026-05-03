@@ -14,6 +14,32 @@ def get_projects(db: Session = Depends(database.get_db), current_user: models.Us
         projects = db.query(models.Project).join(models.ProjectMember).filter(models.ProjectMember.user_id == current_user.id).all()
     return projects
 
+@router.get("/favorites", response_model=List[int])
+def get_favorites(db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
+    favs = db.query(models.UserFavoriteProject).filter(models.UserFavoriteProject.user_id == current_user.id).all()
+    return [f.project_id for f in favs]
+
+@router.post("/{id}/favorite")
+def toggle_favorite(id: int, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
+    project = db.query(models.Project).filter(models.Project.id == id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+        
+    fav = db.query(models.UserFavoriteProject).filter(
+        models.UserFavoriteProject.user_id == current_user.id,
+        models.UserFavoriteProject.project_id == id
+    ).first()
+    
+    if fav:
+        db.delete(fav)
+        db.commit()
+        return {"status": "unfavorited", "projectId": id}
+    else:
+        new_fav = models.UserFavoriteProject(user_id=current_user.id, project_id=id)
+        db.add(new_fav)
+        db.commit()
+        return {"status": "favorited", "projectId": id}
+
 @router.post("/", response_model=schemas.ProjectResponse)
 def create_project(project: schemas.ProjectCreate, db: Session = Depends(database.get_db), current_admin: models.User = Depends(auth.get_current_admin)):
     new_project = models.Project(

@@ -47,6 +47,8 @@ export const projectService = {
   getMembers: (id) => api.get(`/projects/${id}/members`),
   addMember: (id, userId) => api.post(`/projects/${id}/members`, { user_id: userId }),
   removeMember: (id, userId) => api.delete(`/projects/${id}/members/${userId}`),
+  getFavorites: () => api.get('/projects/favorites'),
+  toggleFavorite: (id) => api.post(`/projects/${id}/favorite`),
 };
 
 export const taskService = {
