@@ -10,7 +10,7 @@ const PROJECT_ICONS = [
   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
 ];
 
-function Dashboard() {
+function Dashboard({ favorites = [], toggleFavorite }) {
   const [data, setData] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -74,9 +74,8 @@ function Dashboard() {
           <h1 style={{ fontSize: '1.75rem', letterSpacing: '-0.02em' }}>Welcome back, {userName.split(' ')[0]} 👋</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Here's an overview of your team's progress today.</p>
         </div>
-        <Link to="/projects" className="btn btn-primary" style={{ padding: '0.6rem 1.25rem' }}>
-          <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-          New Project
+        <Link to="/projects" className="btn btn-primary" style={{ padding: '0.6rem 1.5rem' }}>
+          Projects
         </Link>
       </div>
 
@@ -200,20 +199,31 @@ function Dashboard() {
               <Link to="/projects" style={{ fontSize: '0.75rem', fontWeight: 700 }}>Manage</Link>
             </div>
             {projects.slice(0, 4).map((project, i) => (
-              <Link key={project.id} to={`/projects/${project.id}`} className="my-project-item" style={{ padding: '0.75rem 0', gap: '1rem' }}>
-                <div className="my-project-icon" style={{ 
-                  width: '42px', height: '42px',
-                  background: `var(--${['blue', 'purple', 'green', 'orange'][i % 4]}-bg)`, 
-                  color: `var(--${['blue', 'purple', 'green', 'orange'][i % 4]})`,
-                  borderRadius: '12px'
-                }}>
-                  {PROJECT_ICONS[i % PROJECT_ICONS.length]}
-                </div>
-                <div className="my-project-info">
-                  <div className="name" style={{ fontSize: '0.85rem' }}>{project.name}</div>
-                  <div className="count" style={{ fontSize: '0.7rem' }}>{tasks.filter(t => t.project_id === project.id).length} tasks</div>
-                </div>
-              </Link>
+              <div key={project.id} style={{ position: 'relative' }}>
+                <Link to={`/projects/${project.id}`} className="my-project-item" style={{ padding: '0.75rem 0', gap: '1rem' }}>
+                  <div className="my-project-icon" style={{ 
+                    width: '42px', height: '42px',
+                    background: `var(--${['blue', 'purple', 'green', 'orange'][i % 4]}-bg)`, 
+                    color: `var(--${['blue', 'purple', 'green', 'orange'][i % 4]})`,
+                    borderRadius: '12px'
+                  }}>
+                    {PROJECT_ICONS[i % PROJECT_ICONS.length]}
+                  </div>
+                  <div className="my-project-info">
+                    <div className="name" style={{ fontSize: '0.85rem' }}>{project.name}</div>
+                    <div className="count" style={{ fontSize: '0.7rem' }}>{tasks.filter(t => t.project_id === project.id).length} tasks</div>
+                  </div>
+                </Link>
+                <button 
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(project.id); }}
+                  className={`fav-btn ${favorites.includes(project.id) ? 'active' : ''}`}
+                  style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}
+                >
+                  <svg fill={favorites.includes(project.id) ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                  </svg>
+                </button>
+              </div>
             ))}
           </div>
         </div>

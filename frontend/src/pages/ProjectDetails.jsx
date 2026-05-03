@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { taskService, projectService, authService } from '../services/api';
 
-function ProjectDetails() {
+function ProjectDetails({ favorites = [], toggleFavorite }) {
   const { id } = useParams();
   const [tasks, setTasks] = useState([]);
   const [project, setProject] = useState(null);
@@ -18,6 +18,7 @@ function ProjectDetails() {
   const [showTaskForm, setShowTaskForm] = useState(false);
 
   const role = localStorage.getItem('role') || 'member';
+  const isFav = favorites.includes(parseInt(id));
 
   useEffect(() => {
     fetchTasks();
@@ -102,7 +103,18 @@ function ProjectDetails() {
           <span style={{ color: 'var(--text)' }}>{project?.name || `Project #${id}`}</span>
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{project?.name || 'Project Details'}</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{project?.name || 'Project Details'}</h1>
+            <button 
+              onClick={() => toggleFavorite(parseInt(id))}
+              className={`fav-btn-large ${isFav ? 'active' : ''}`}
+              title={isFav ? 'Remove from Favorites' : 'Add to Favorites'}
+            >
+              <svg fill={isFav ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+              </svg>
+            </button>
+          </div>
           {tasks.length > 0 && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', width: '220px' }}>
               <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Progress:</span>
@@ -251,26 +263,34 @@ function ProjectDetails() {
           )}
 
           <div className="panel">
-            <div className="table-head member-cols">
-              <span>Member</span><span>Email</span><span>Role</span>{role === 'admin' && <span style={{ textAlign: 'right' }}>Actions</span>}
+            <div className="table-head member-table-cols">
+              <span>Member</span><span>Email</span><span>Role</span><span></span>
             </div>
             {members.length > 0 ? members.map(m => (
-              <div key={m.id} className="table-row" style={{ display: 'grid', gridTemplateColumns: role === 'admin' ? '1fr 1.5fr 100px 80px' : '1fr 1.5fr 100px', gap: '1rem', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700, color: 'var(--primary)', flexShrink: 0 }}>
+              <div key={m.id} className="table-row member-table-cols">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div className="member-avatar">
                     {m.user?.name?.charAt(0)?.toUpperCase() || '?'}
                   </div>
-                  <span style={{ fontWeight: 600, fontSize: '0.8rem' }}>{m.user?.name || 'Unknown'}</span>
+                  <span className="task-title" style={{ marginBottom: 0 }}>{m.user?.name || 'Unknown'}</span>
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{m.user?.email || ''}</div>
-                <div><span className={`badge ${m.user?.role === 'admin' ? 'todo' : 'done'}`}>{m.user?.role || 'member'}</span></div>
-                {role === 'admin' && (
-                  <div style={{ textAlign: 'right' }}>
-                    {m.user?.id !== project?.owner_id && (
-                      <button onClick={() => handleRemoveMember(m.user?.id)} className="btn-ghost" style={{ color: 'var(--red)', fontSize: '0.65rem' }}>Remove</button>
-                    )}
-                  </div>
-                )}
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{m.user?.email || ''}</div>
+                <div>
+                  <span className={`badge ${m.user?.role === 'admin' ? 'todo' : 'done'}`}>
+                    {m.user?.role || 'member'}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  {role === 'admin' && m.user?.id !== project?.owner_id && (
+                    <button 
+                      onClick={() => handleRemoveMember(m.user?.id)} 
+                      className="btn-ghost" 
+                      style={{ color: 'var(--red)', fontSize: '0.75rem', fontWeight: 600, padding: '0.4rem 0.8rem' }}
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
               </div>
             )) : <div className="empty-state">No members in this project.</div>}
           </div>
