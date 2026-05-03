@@ -9,8 +9,20 @@ function MyTasks() {
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    taskService.getTasks().then(res => setTasks(res.data)).catch(console.error);
-    projectService.getProjects().then(res => setProjects(res.data)).catch(console.error);
+    const fetchAll = async () => {
+      try {
+        const [taskRes, projRes] = await Promise.all([
+          taskService.getTasks(),
+          projectService.getProjects()
+        ]);
+        setTasks(taskRes.data);
+        setProjects(projRes.data);
+      } catch (e) { console.error(e); }
+    };
+
+    fetchAll();
+    const interval = setInterval(fetchAll, 10000); // Sync every 10 seconds
+    return () => clearInterval(interval);
   }, []);
 
   const today = new Date().toISOString().split('T')[0];

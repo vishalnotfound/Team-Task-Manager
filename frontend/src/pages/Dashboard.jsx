@@ -19,9 +19,22 @@ function Dashboard({ favorites = [], toggleFavorite }) {
   const role = localStorage.getItem('role') || 'member';
 
   useEffect(() => {
-    dashboardService.getDashboard().then(res => setData(res.data)).catch(console.error);
-    taskService.getTasks().then(res => setTasks(res.data)).catch(console.error);
-    projectService.getProjects().then(res => setProjects(res.data)).catch(console.error);
+    const fetchDashboardData = async () => {
+      try {
+        const [dashRes, taskRes, projRes] = await Promise.all([
+          dashboardService.getDashboard(),
+          taskService.getTasks(),
+          projectService.getProjects()
+        ]);
+        setData(dashRes.data);
+        setTasks(taskRes.data);
+        setProjects(projRes.data);
+      } catch (e) { console.error(e); }
+    };
+
+    fetchDashboardData();
+    const interval = setInterval(fetchDashboardData, 10000); // Sync every 10 seconds
+    return () => clearInterval(interval);
   }, []);
 
   if (!data) return <div className="empty-state">Loading dashboard...</div>;

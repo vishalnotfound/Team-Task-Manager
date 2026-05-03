@@ -35,7 +35,12 @@ function App() {
         setFavorites(favRes.data);
       } catch (e) { console.error(e); }
     };
-    if (isAuthenticated) fetchData();
+
+    if (isAuthenticated) {
+      fetchData();
+      const interval = setInterval(fetchData, 10000); // Poll every 10 seconds
+      return () => clearInterval(interval);
+    }
   }, [isAuthenticated]);
 
   const toggleFavorite = async (projectId) => {

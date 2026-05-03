@@ -21,10 +21,27 @@ function ProjectDetails({ favorites = [], toggleFavorite }) {
   const isFav = favorites.includes(parseInt(id));
 
   useEffect(() => {
-    fetchTasks();
-    fetchProject();
-    fetchMembers();
-    if (role === 'admin') fetchUsers();
+    const fetchAllData = async () => {
+      try {
+        const [taskRes, projRes, membRes] = await Promise.all([
+          taskService.getTasks(id),
+          projectService.getProjects(),
+          projectService.getMembers(id)
+        ]);
+        setTasks(taskRes.data);
+        const proj = projRes.data.find(p => p.id === parseInt(id));
+        if (proj) setProject(proj);
+        setMembers(membRes.data);
+        if (role === 'admin') {
+          const userRes = await authService.getUsers();
+          setAllUsers(userRes.data);
+        }
+      } catch (e) { console.error(e); }
+    };
+
+    fetchAllData();
+    const interval = setInterval(fetchAllData, 10000); // Sync every 10 seconds
+    return () => clearInterval(interval);
   }, [id]);
 
   const fetchTasks = async () => {

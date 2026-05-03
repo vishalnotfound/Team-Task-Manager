@@ -13,8 +13,20 @@ function Projects({ favorites = [], toggleFavorite }) {
   const role = localStorage.getItem('role') || 'member';
 
   useEffect(() => {
-    fetchProjects();
-    taskService.getTasks().then(res => setAllTasks(res.data)).catch(console.error);
+    const fetchAll = async () => {
+      try {
+        const [projRes, taskRes] = await Promise.all([
+          projectService.getProjects(),
+          taskService.getTasks()
+        ]);
+        setProjects(projRes.data);
+        setAllTasks(taskRes.data);
+      } catch (e) { console.error(e); }
+    };
+
+    fetchAll();
+    const interval = setInterval(fetchAll, 10000); // Sync every 10 seconds
+    return () => clearInterval(interval);
   }, []);
 
   const fetchProjects = async () => {
