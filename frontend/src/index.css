@@ -1885,7 +1885,22 @@ select.status-select:hover {
     top: 60px;
   }
 
-  /* Filter Tabs scroll */
+  .search-dropdown {
+    position: fixed !important;
+    top: 60px !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    margin-top: 0 !important;
+    width: auto !important;
+  }
+  
+  /* Project Detail Header Progress Override */
+  .page-content > div > div:first-child > div:nth-child(2) > div:nth-child(2) {
+    width: auto !important;
+    flex: 1 !important;
+  }
+
+  /* Progress bar in project details header */
   .filter-tabs {
     overflow-x: auto;
     width: 100%;
@@ -1942,6 +1957,11 @@ select.status-select:hover {
     border-right: none;
     border-bottom: 1px solid var(--border);
     text-align: center;
+  }
+
+  /* Center the brand logo + text flex container */
+  .login-sidebar > div:first-child > div:first-child {
+    justify-content: center !important;
   }
   
   .login-sidebar h1 {
